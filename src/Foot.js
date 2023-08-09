@@ -1,8 +1,9 @@
-const Foot = () => {
-  const today = new Date();
+const Foot = ({ length }) => {
   return (
     <footer>
-      <p>Copyright &copy; {today.toUTCString()}</p>
+      <p>
+        {length} List {length <= 1 ? "item" : "items"}
+      </p>
     </footer>
   );
 };
