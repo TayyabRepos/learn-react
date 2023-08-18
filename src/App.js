@@ -7,9 +7,26 @@ import AddItem from "./AddItem";
 import Search from "./Search";
 
 function App() {
-  const [item, setItem] = useState(
-    JSON.parse(localStorage.getItem("shopinglist")) || []
-  );
+  const [item, setItem] = useState([
+    {
+      id: 1,
+      checked: true,
+      item: "One half pound bag of Cocoa Covered Almonds Unsalted",
+    },
+    {
+      id: 2,
+      checked: false,
+      item: "Item 2",
+    },
+    {
+      id: 3,
+      checked: false,
+      item: "Item 3",
+    },
+  ]);
+
+  // Find the maximum ID in the initial item list
+  const maxId = Math.max(...item.map((item) => item.id), 0);
 
   useEffect(() => {
     console.log("Item Updated");
@@ -23,9 +40,8 @@ function App() {
     localStorage.setItem("shopinglist", JSON.stringify(listItem));
   };
 
-  const addItem = (item) => {
-    const id = item.length ? item[item.length - 1].id + 1 : 1;
-    const myNewItem = { id, checked: false, item };
+  const addItem = (itemText) => {
+    const myNewItem = { id: maxId + 1, checked: false, item: itemText };
     const listItem = [...item, myNewItem];
     setAndSave(listItem);
   };
@@ -58,7 +74,13 @@ function App() {
         handleSubmit={handleSubmit}
       />
       <Search search={search} setSearch={setSearch} />
-      <Cunt item={item} handleCheck={handleCheck} handleDelete={handleDelete} />
+      <Cunt
+        item={item.filter((item) =>
+          item.item.toLowerCase().includes(search.toLowerCase())
+        )}
+        handleCheck={handleCheck}
+        handleDelete={handleDelete}
+      />
       <Foot length={item.length} />
     </div>
   );
